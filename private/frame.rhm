@@ -1,7 +1,9 @@
 #lang rhombus/static/and_meta
 import:
   meta:
-    rhombus_dyn open
+    rhombus_dyn:
+      open
+      except #%call
     "id_map.rhm" open
     "type.rhm" as t
   "type_statinfo.rhm" as t_s
@@ -27,10 +29,10 @@ export:
   relet_frame
 
 meta:
-  class Frame(mutable type_defns :~ IdMap = IdMap{},
-              mutable defn_types :~ List = [],
-              mutable final_defn_types :~ List = [],
-              ~parent: mutable parent :: maybe(Frame) = #false,
+  class Frame(mutable type_defns :~ Dyn = IdMap{},
+              mutable defn_types :~ Dyn = [],
+              mutable final_defn_types :~ Dyn = [],
+              ~parent: mutable parent :: Dyn = #false,
               mutable children :: List = [],
               ~poly_context: mutable poly_context :: List,
               ~tvars: mutable tvars :~ IdMap = IdMap{},
