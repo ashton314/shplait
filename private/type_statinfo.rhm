@@ -2,6 +2,7 @@
 import:
   meta:
     "type.rhm" as t
+    rhombus_dyn open
 
 export:
   meta:
@@ -27,10 +28,10 @@ meta:
                                 sym_to_ty[sym] := ty
                                 sym))
 
-  fun syntax_to_type(stx :: Syntax):
+  fun syntax_to_type(stx :: Dyn):
     sym_to_ty[stx.unwrap()]
 
-  fun lookup_poly_type(expr :: Syntax, orig :: maybe(Syntax)):
+  fun lookup_poly_type(expr :: Syntax, orig :: Dyn):
     let id = statinfo_meta.lookup(expr, type_key)
     cond
     | id: syntax_to_type(id)

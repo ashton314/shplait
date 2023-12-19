@@ -1,6 +1,7 @@
 #lang rhombus/static/and_meta
 import:
   meta:
+    rhombus_dyn open
     "id_map.rhm" open
     "type.rhm" as t
   "type_statinfo.rhm" as t_s

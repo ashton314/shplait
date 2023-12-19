@@ -1,6 +1,7 @@
 #lang rhombus/static/and_meta
 import:
   meta:
+    rhombus_dyn open
     "type.rhm" as t
   "type_statinfo.rhm" as t_s
   "value.rhm".value
@@ -9,7 +10,7 @@ export:
   rename literal as #%literal
 
 meta:
-  fun type_of_literal(lit :: Syntax):
+  fun type_of_literal(lit :: Dyn):
     match lit.unwrap()
     | (_ :: Boolean): t.Bool(lit)
     | (_ :: String): t.Str(lit)

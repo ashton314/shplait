@@ -1,6 +1,7 @@
 #lang rhombus/static/and_meta
 import:
   meta:
+    rhombus_dyn open
     "type.rhm" as t
   "frame.rhm" as f
 
@@ -13,7 +14,7 @@ export:
 meta:
   // returns a configuration representation to pass to submodules
   // and a list of remaining forms
-  fun parse_and_apply_configure(forms :: List.of(Syntax)):
+  fun parse_and_apply_configure(forms :: Dyn):
     recur loop(forms = forms,
                ~eager: eager = #false,
                ~lazy: lazy = #false,
