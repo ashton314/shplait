@@ -1,8 +1,10 @@
 #lang rhombus/static/and_meta
+
 import:
   lib("racket/base.rkt")
   rhombus_dyn:
-    as D
+    as Dyn
+    expose: Dyn
   meta -1:
     rhombus/static/meta:
       open
@@ -141,7 +143,7 @@ class Poly(tvar :: TVar, type :: Type):
     error("shouldn't clone poly")
 
 // For parsing, only
-class ParenOf(args :: D.Dyn):
+class ParenOf(args :: Dyn):
   extends Type
   override clone():
     this with (args = args.map(Type.clone))
@@ -206,7 +208,7 @@ fun get_defn_tvars(t :: Type) :: Set:
   | t :: NonPolyDefn: t.tvars
   | ~else: []
 
-fun to_expression(type :: Type,  tvar_names :: D.Dyn = {}): // FIXME: `tvar_names` should be `===`-based
+fun to_expression(type :: Type,  tvar_names :: Dyn = {}): // FIXME: `tvar_names` should be `===`-based
   recur loop (type = type):
     match type
     | type :: Defn:
@@ -242,7 +244,7 @@ fun to_expression(type :: Type,  tvar_names :: D.Dyn = {}): // FIXME: `tvar_name
         let name = Syntax.make_temp_id("a")
         'block:
            let $name = gen_tvar(#false)
-           Poly(#false, $name, $(to_expression(type.type, tvar_names D.(++) {type.tvar: name})))'
+           Poly(#false, $name, $(to_expression(type.type, tvar_names Dyn.(++) {type.tvar: name})))'
     | type :: OpaqueDatatype:
         'OpaqueDatatype(#false, '$(type.id)', [], '$(type.pred)')'
     | type :: Datatype:
@@ -562,7 +564,7 @@ fun trim(s :: String):
   | Char.is_whitespace(s[s.length()-1]): trim(s.substring(0, s.length()-1))
   | ~else: s
 
-fun raise_typecheck_error(main_expr :: D.Dyn, a, b,
+fun raise_typecheck_error(main_expr :: Dyn, a, b,
                           reason = #false,
                           ~is_function_call: is_function_call = #false):
   let exprs :: List:
