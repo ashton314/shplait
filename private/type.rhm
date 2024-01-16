@@ -202,7 +202,7 @@ class Hide(v):
   override describe(mode, recur):
     "Hide"
 
-fun get_defn_tvars(t :: Type) :: Set:
+fun get_defn_tvars(t :: Dyn) :: Set:
   match t
   | t :: Defn: t.tvars
   | t :: NonPolyDefn: t.tvars
@@ -268,8 +268,8 @@ fun gen_tvar(src, is_arrow = #false):
   | TVar(src, #false, #false)
 
 fun type_to_string(tmap :: MutableMap):
-  fun (type :: Type):
-    recur loop(type = type) :~ String:
+  fun (type :: Dyn):
+    recur loop(type = type) :~ Dyn:
       fun loop_at(type, context) :~ String:
         let str = loop(type)
         match type
@@ -351,8 +351,8 @@ fun type_to_string(tmap :: MutableMap):
       | ~else: error(#'to_string,
                      "got confused, trying to generate a string for " +& type)
 
-fun non_poly_do(t :: Type, poly_context :: List):
-  recur loop (t :: Type = t):
+fun non_poly_do(t :: Dyn, poly_context :: Dyn):
+  recur loop (t :: Dyn = t):
     match t
     | t :: TVar:
         if t.rep
@@ -408,7 +408,7 @@ fun non_poly_do(t :: Type, poly_context :: List):
         loop(t.type)
     | ~else: #void
 
-fun as_non_poly(t :: Type, poly_context, tvars):
+fun as_non_poly(t :: Dyn, poly_context, tvars):
   non_poly_do(t, poly_context)
   NonPolyDefn(t.src, t, tvars)
 
@@ -493,10 +493,10 @@ fun create_defn(t :: Type, poly_context, base_tvars, tvars):
        base_tvars,
        tvars)
 
-fun poly_ize_wrt(t :: Type, poly_context, base_tvars):
+fun poly_ize_wrt(t :: Dyn, poly_context, base_tvars):
   poly_ize(t, extract_tvars(t, poly_context, base_tvars))
 
-fun poly_ize(t :: Type, tvars :: List):
+fun poly_ize(t :: Dyn, tvars :: Dyn):
   recur loop (tvars = tvars.reverse(),
               t :~ Type = t):
     match tvars
@@ -504,7 +504,7 @@ fun poly_ize(t :: Type, tvars :: List):
     | [tvar, & tvars]:
         loop(tvars, Poly(t.src, tvar, t))
 
-fun poly_ize_upto(t :: Type, allowed_tvars :: List, orig :: Syntax):
+fun poly_ize_upto(t :: Dyn, allowed_tvars :: Dyn, orig :: Dyn):
   let tvars = extract_tvars(t, [], Set())
   match removeAll(tvars, allowed_tvars)
   | []: poly_ize(t, tvars)

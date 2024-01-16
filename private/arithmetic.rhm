@@ -1,6 +1,7 @@
 #lang rhombus/static/and_meta
 import:
   meta:
+    rhombus_dyn: open
     "type.rhm" as t
   "frame.rhm" as f
   "type_statinfo.rhm" as t_s
@@ -92,7 +93,7 @@ export:
     shor as ||
 
 meta:
-  fun parse_bool(left, right, self, op :: Syntax):
+  fun parse_bool(left, right, self, op :: Dyn):
     let bool = t.Bool(self)
     let [left_ty, new_left] = t_s.lookup_type(left, #false)
     let [right_ty, new_right] = t_s.lookup_type(right, #false)
