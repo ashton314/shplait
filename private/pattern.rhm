@@ -1,6 +1,9 @@
 #lang rhombus/static/and_meta
+
 import:
   "type_statinfo.rhm" as t_s
+  meta:
+    rhombus_dyn open
 
 export:
   pattern
@@ -15,15 +18,15 @@ space.transform pattern:
     export:
       pack unpack
       pack_type unpack_type
-    fun pack(stx :: Syntax):
+    fun pack(stx :: Dyn):
       stx
-    fun unpack(stx :: Syntax):
+    fun unpack(stx :: Dyn):
       match stx
       | '($dt_id, $dt_arg_len, $pat_id, $ty)':
           [dt_id, dt_arg_len.unwrap(), pat_id, t_s.syntax_to_type(ty)]
       | ~else #false
     fun pack_type([id, ...]):
       '[$id, ...]'
-    fun unpack_type(stx :: Syntax):
+    fun unpack_type(stx :: Dyn):
       let '[$id, ...]' = stx
       [id, ...]

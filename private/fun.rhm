@@ -3,6 +3,7 @@ import:
   meta:
     "type.rhm" as t
     "id_map.rhm" open
+    rhombus_dyn open
   "argument.rhm" open
   "type_statinfo.rhm" as t_s
   "frame.rhm" as f
@@ -55,7 +56,7 @@ value.macro
     let stx = '$self ($arg, ...) $res_type:
                  $body'
     let tvar_box = Box(IdMap{})
-    let (arrow_type :: t.Arrow, [arg_id, ...]):
+    let (arrow_type :: Dyn, [arg_id, ...]):
       parse_function_type(stx, self, current_value_tvar_box())
     t_s.type_to_syntax(arrow_type)
 | 'function $_':
@@ -67,7 +68,7 @@ expr.macro
     ~op_stx self
     ~all_stx stx
     let tvar_box = Box(IdMap{})
-    let (arrow_type :: t.Arrow, [arg_id, ...]):
+    let (arrow_type :: Dyn, [arg_id, ...]):
       parse_function_type(stx, self, tvar_box)
     let [arg_type, ...] = arrow_type.args
     let res_ty = arrow_type.result

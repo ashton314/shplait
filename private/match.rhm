@@ -347,6 +347,9 @@ expr.macro '$left shis_a $(ctr :: Identifier)':
                 t.Bool(self))
 
 meta:
+  import:
+    rhombus_dyn open
+    
   syntax_class MustBeIdentifier(stx):
   | '$(id :: Identifier)'
   | '$(id :: Identifier) $next $tail ...':
@@ -382,7 +385,7 @@ meta:
         syntax_meta.error("expected a pattern followed by a `:` block", stx, clause)
 
   fun check_variants_consistent(self, [ctr, ...], [dt_id, ...], the_dt_id):
-    for values(seen :~ IdMap = IdMap{}):
+    for values(seen :~ Dyn = IdMap{}):
       each:
         ctr: [ctr, ...]
         dt_id: [dt_id, ...]
@@ -393,7 +396,7 @@ meta:
       seen ++ IdMap{ ctr: #true }
 
   fun check_variants_complete(self, [ctr, ...], the_dt_id, else_kw):
-    let dt_variants :~ List.of(Identifier):
+    let dt_variants :~ List.of(Dyn):
       let '$(dt_pat ::  pattern_meta.Parsed)': the_dt_id
       pattern_meta.unpack_type(dt_pat)
     let all_here = [ctr, ...].length() == dt_variants.length()

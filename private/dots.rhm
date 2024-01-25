@@ -4,6 +4,7 @@ import:
     "type.rhm" as t
   "type_statinfo.rhm" as t_s
   "value.rhm".value
+  rhombus_dyn open
 
 export:
   ....
@@ -27,7 +28,7 @@ expr.macro
                   stx,
                   t.gen_tvar(#false))
 
-fun reached_dots(op :: Syntax):  
+fun reached_dots(op :: Dyn):  
   throw Exn.Fail.Syntax("reached an incomplete expression",
                         Continuation.current_marks(),
                         [op.relocate_span([op])])
