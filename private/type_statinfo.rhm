@@ -20,7 +20,7 @@ meta:
 
   def type_key = 'type_key'
 
-  fun type_to_syntax(ty :: t.Type):
+  fun type_to_syntax(ty :: Dyn):
     Syntax.make(ty_to_sym.get(ty,
                               fun ():
                                 let sym = Symbol.gen()
@@ -31,7 +31,7 @@ meta:
   fun syntax_to_type(stx :: Dyn):
     sym_to_ty[stx.unwrap()]
 
-  fun lookup_poly_type(expr :: Syntax, orig :: Dyn):
+  fun lookup_poly_type(expr :: Dyn, orig :: Dyn):
     let id = statinfo_meta.lookup(expr, type_key)
     cond
     | id: syntax_to_type(id)
@@ -39,15 +39,15 @@ meta:
         syntax_meta.error("no type available, possibly an unbound identifier", orig || expr)
     | ~else: t.gen_tvar(#false)
 
-  fun lookup_type(expr :: Syntax, orig :: maybe(Syntax)):
+  fun lookup_type(expr :: Dyn, orig :: maybe(Dyn)):
     let expr = expr_meta.parse_more(expr)
     [t.at_source(t.poly_instance(lookup_poly_type(expr, orig)), expr),
      expr]
 
   fun
-  | wrap_type(expr :: Syntax, ty):
+  | wrap_type(expr :: Dyn, ty):
       statinfo_meta.wrap(expr, '(($type_key, $(type_to_syntax(ty))))')
-  | wrap_type(expr :: Syntax, orig_stx :: Syntax, ty):
+  | wrap_type(expr :: Dyn, orig_stx :: Dyn, ty):
       wrap_type('($expr)'.relocate_span([orig_stx]), ty)
 
   fun register_type(sym, ty):

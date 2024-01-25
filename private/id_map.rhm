@@ -1,18 +1,19 @@
 #lang rhombus/static/and_meta
 import:
+  rhombus_dyn open
   meta -1:
     rhombus/meta.syntax_meta
 
 export:
   IdMap
 
-class IdMap(table :~ Map):
+class IdMap(table :~ Dyn):
   internal _IdMap
   private implements:
     Indexable
     Appendable
 
-  fun build([[key :~ Identifier, val], ...]):
+  fun build([[key :~ Dyn, val], ...]):
     for values (table :~ Map = {}):
       each:
         key: [key, ...]
@@ -23,7 +24,7 @@ class IdMap(table :~ Map):
     '_IdMap(build([[$key ..., $val], ...])) :~ IdMap'
 
   private override get(index :: Identifier):
-    let candidates :~ List = table.get(index.unwrap(), [])
+    let candidates :~ Dyn = table.get(index.unwrap(), [])
     for any:
       each Pair(key, val): candidates
       syntax_meta.equal_binding(key, index) && val
@@ -33,13 +34,13 @@ class IdMap(table :~ Map):
              each (sym, candidates :~ List): other.table
              table ++ { sym: candidates ++ table.get(sym, []) })
 
-  method flatten() :: Map:
+  method flatten() :: Dyn:
     for Map:
       each (k, ps :~ List): table
       each Pair(key, val): ps
       values(key, val)
 
-  method val_set() :: Set:
+  method val_set() :: Dyn:
     for Set:
       each (k, ps :~ List): table
       each Pair(_, val): ps

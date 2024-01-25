@@ -1,6 +1,7 @@
 #lang rhombus/static/and_meta
 import:
   meta:
+    rhombus_dyn open
     "type.rhm" as t
     "id_map.rhm" open
   "type_statinfo.rhm" as t_s
@@ -40,7 +41,7 @@ space.enforest type_expr:
       unpack
       XParsed
       XAfterInfixParsed
-    fun pack(t :: t.Type):
+    fun pack(t :: Dyn):
       let pk = _pack(t_s.type_to_syntax(t))
       if t.src is_a Syntax
       | Syntax.relocate(pk, t.src)
@@ -286,7 +287,7 @@ type_expr.macro '$init * $(next :: type_expr_meta.XAfterInfixParsed('*')) $()':
                tail)
 
 meta:
-  fun parse(stx, op, src :: Syntax, tvars_box, lookup_type, lookup_tvar):
+  fun parse(stx, op, src :: Dyn, tvars_box, lookup_type, lookup_tvar):
     parameterize { current_tvars_box: tvars_box,
                    current_type_lookup: lookup_type,
                    current_tvar_lookup: lookup_tvar}:      

@@ -1,6 +1,7 @@
 #lang rhombus/static/and_meta
 import:
   meta:
+    rhombus_dyn open
     "type.rhm" as t
   "type_statinfo.rhm" as t_s
   "value.rhm".value
@@ -9,6 +10,7 @@ import:
   "lazy.rhm" open
   "lazy.rhm".force_all as lazy_force_all    
   "value.rhm".all_value_types
+  rhombus_dyn open
 
 export:
   rename:
@@ -37,9 +39,9 @@ class SPair(first, rest):
 fun | to_slist([]): []
     | to_slist([a, x, ...]): SPair(a, to_slist([x, ...]))
                              
-fun | from_slist([]) :~ List: []
-    | from_slist(SPair(f, r)) :~ List: List.cons(f, from_slist(r))
-    | from_slist(v) :~ List:
+fun | from_slist([]) :~ Dyn: []
+    | from_slist(SPair(f, r)) :~ Dyn: List.cons(f, from_slist(r))
+    | from_slist(v) :~ Dyn:
         let fv = dynamic_force(v)
         if fv === v
         | error(#'from_slist, "bad: " +& v)
