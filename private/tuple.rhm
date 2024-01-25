@@ -8,6 +8,7 @@ import:
   "value.rhm".value_meta
   "value.rhm".all_value_types
   "lazy.rhm" open
+  rhombus_dyn open
 
 export:
   rename:
@@ -16,7 +17,7 @@ export:
 module tuple:
   export Tuple
 
-class Tuple(args :~ List):
+class Tuple(args :~ Dyn):
   private implements Printable
   private override describe(mode, recur):
     PrintDesc.list("values(",

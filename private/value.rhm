@@ -2,6 +2,7 @@
 import:
   meta:
     "type.rhm" as t
+    rhombus_dyn open
   "type_statinfo.rhm" as t_s
 
 export:
@@ -33,7 +34,7 @@ meta:
 meta:
   def current_value_tvar_box = Parameter.make(#false)
 
-  fun all_value_types([maybe_val :~ Syntax, ...]):
+  fun all_value_types([maybe_val :~ Dyn, ...]):
     for all:
       each maybe_val: [maybe_val, ...]
       maybe_val.unwrap() != #false

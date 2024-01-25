@@ -18,6 +18,7 @@ import:
   "value.rhm".all_value_types
   "lazy.rhm" open
   "denylist.rhm"
+  rhombus_dyn open
 
 export:
   type
@@ -149,6 +150,9 @@ decl.macro
       »'
 
 meta:
+  import:
+    rhombus_dyn open
+
   fun parse_arg_types([arg_g, ...], self, args, tvars_box):
     when args == []
     | syntax_meta.error("empty parenthesized sequence of type variables not allowed", self, args)
@@ -176,9 +180,10 @@ meta:
   fun parse_constructor_app_value(dty_sym, tail):
     match tail
     | '($arg, ...) $tail ...':
-        let dty :: t.Datatype = t_s.syntax_to_type(dty_sym)
+        let dty :: Dyn = t_s.syntax_to_type(dty_sym)
+        let dty_args :: Dyn = dty.args
         cond
-        | dty.args.length() != [arg, ...].length():
+        | dty_args.length() != [arg, ...].length():
             '#false'
         | ~else:
             match '($arg, ...)':

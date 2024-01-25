@@ -1,5 +1,9 @@
 #lang rhombus/static/and_meta
 
+import:
+  meta:
+    rhombus_dyn open
+
 export:
   meta:
     validate
@@ -17,7 +21,7 @@ meta:
     #'Array, #'MutableMap,
   }
 
-  fun validate(id :: Identifier, what):
+  fun validate(id :: Dyn, what):
     when denylist[id.unwrap()]
     | syntax_meta.error("disallowed name for " +& what +& ";\n"
                           +& " to prevent confusion, some predefined names"
